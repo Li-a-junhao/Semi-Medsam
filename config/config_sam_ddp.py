@@ -13,8 +13,6 @@ def getargs():
     parser.add_argument('--dataset', type=str, default="Throat", help="dataset choice from Throat or Throat2 or Throat3")
     parser.add_argument('--consistency', type=float, default=1, help="consistency weight")
     parser.add_argument('--consistency_type', type=str, default="MT", help="consistency type")
-    parser.add_argument('--model', type=str, default="sam", help="sam or unet")
-    parser.add_argument('--modal', type=str, default="WHITE", help="NBI or WHITE")
     parser.add_argument('--set_moe_layer', type=int, default=3, help="each layer to insert moe")
     parser.add_argument('--label_num', type=int, help="label_num")
     parser.add_argument('-n', '--nodes', default=1, type=int, help='the number of nodes/computer')

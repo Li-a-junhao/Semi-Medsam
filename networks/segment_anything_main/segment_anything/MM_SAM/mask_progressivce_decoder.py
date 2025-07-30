@@ -271,7 +271,7 @@ class MaskDecoder(nn.Module):
         self.num_multimask_outputs = 2
         self.num_prototypes = num_prototypes
         self.iou_token = nn.Embedding(1, transformer_dim)
-        self.num_mask_tokens = 2  # num_multimask_outputs + 1
+        self.num_mask_tokens = 4  # num_multimask_outputs + 1
         self.mask_tokens = nn.Embedding(self.num_mask_tokens, transformer_dim)
         self.prototype_tokens = nn.Embedding(self.num_prototypes, transformer_dim)
         self.prototype_mlp = nn.Linear(num_prototypes, self.num_multimask_outputs)
