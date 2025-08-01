@@ -1,7 +1,8 @@
 # Semi-Medsam
 
 # Introduction
-This repository contains the official PyTorch implementation for our paper, "Semi-MedSAM," which proposes a novel framework that fine-tunes a vision foundation model (e.g., SAM) for multi-modal medical endoscopic image segmentation in a semi-supervised setting.
+This repository contains the official PyTorch implementation for our paper, "Semi-MedSAM: Adapting SAM-assisted Semi-supervised Multi-modality Learning for
+Medical Endoscopic Image Segmentation", which proposes a novel framework that fine-tunes a vision foundation model (e.g., SAM) for multi-modal medical endoscopic image segmentation in a semi-supervised setting.
 In this work, we present a novel prompt-free, SAM-assisted framework named Semi-MedSAM for semi-supervised multi-modal medical image segmentation, which is designed to adapt large vision models while mitigating confirmation bias. Within its encoder, we first introduce a MoGAE-Adapter, which inserts a Mixture-of-Experts (MoE) based adapter into the SAM transformer blocks. This module dynamically routes feature tokens to specialized experts, allowing the network to adaptively capture the distinct semantic information of various lesion types from multi-modal inputs.  To decode these refined features, we then propose a Hierarchical Prototypical Decoder that comprises a prototype update module and a channel-wise feature aggregate module. In this decoder, prototype tokens, serving as queries, and image tokens, serving as keys, are refined in parallel. By leveraging this dual refinement process, the decoder achieves a finer granularity of feature representation, which ultimately leads to more precise segmentation predictions.
 
 ![Framework Diagram](figure/framework.png)
