@@ -3,7 +3,7 @@ import argparse
 
 def getargs():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--root_path', type=str, default='/home/lijunhao/Seg/CauSSL-main', help='Name of Experiment')
+    parser.add_argument('--root_path', type=str, default='??', help='Name of Experiment')
     parser.add_argument('--batch_size', type=int, default=2, help='batch_size per gpu')
     parser.add_argument('--base_lr', type=float, default=1e-2, help='maximum epoch number to train')
     parser.add_argument('--epoch_num', type=int, default=200, help='epoch_num')

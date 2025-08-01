@@ -16,14 +16,13 @@ import torch.multiprocessing as mp
 import torch.distributed as dist
 from utils_.metrics import Dice_and_ce_loss
 from utils_.metric import calculate_metrics, sum_metrics
-from config.config_sam_ddp import getargs
+from config.config import getargs
 from utils_.Throat_Dataset import Throatdataset
 from utils_.framework import MT_framework
 
-file_path = r""  # todo
-
 
 def main(gpu, args, train_lb, train_ulb, test_set):
+    file_path = args.root_path
     rank = args.nr * args.gpus + gpu  # 获取当前进程
     if rank == 0:
         print(f'gpu:{gpu}')
@@ -57,7 +56,7 @@ def main(gpu, args, train_lb, train_ulb, test_set):
     os.makedirs(snapshot_path, exist_ok=True)
     os.makedirs(save_path, exist_ok=True)
 
-    sam_checkpoint = r""  # SAM pretrained checkpoint
+    sam_checkpoint = args.root_path + r"checkpoints/SAM/sam_vit_b_01ec64 (1).pth"
     model_type = "vit_b"
     model = sam_moe_v2_256[model_type](gpu, args=args, num_classes=2, checkpoint=sam_checkpoint)
     model_ema = sam_moe_v2_256[model_type](gpu, args=args, num_classes=2, checkpoint=sam_checkpoint)
@@ -164,12 +163,12 @@ def main(gpu, args, train_lb, train_ulb, test_set):
                     metric_total = sum_metrics(metric_total, metric)
 
                 reduce_count_test = torch.tensor(count_test).cuda(gpu)
-                reduce_dice_avg = torch.tensor(metric_total[0]).cuda(gpu)
-                reduce_dice_0 = torch.tensor(metric_total[1]).cuda(gpu)
-                reduce_dice_1 = torch.tensor(metric_total[2]).cuda(gpu)
+                reduce_dice_avg = metric_total[0].clone().detach().cuda(gpu)
+                reduce_dice_0 = metric_total[1].clone().detach().cuda(gpu)
+                reduce_dice_1 = metric_total[2].clone().detach().cuda(gpu)
                 reduce_miou = torch.tensor(metric_total[3]).cuda(gpu)
-                reduce_iou_0 = torch.tensor(metric_total[4]).cuda(gpu)
-                reduce_iou_1 = torch.tensor(metric_total[5]).cuda(gpu)
+                reduce_iou_0 = metric_total[4].clone().detach().cuda(gpu)
+                reduce_iou_1 = metric_total[5].clone().detach().cuda(gpu)
                 reduce_sp = torch.tensor(metric_total[6]).cuda(gpu)
                 reduce_se = torch.tensor(metric_total[7]).cuda(gpu)
                 dist.reduce(reduce_dice_avg, 0, op=dist.ReduceOp.SUM)
@@ -192,12 +191,12 @@ def main(gpu, args, train_lb, train_ulb, test_set):
                     print("sp", reduce_sp.item() / reduce_count_test.item())
                     print("se", reduce_se.item() / reduce_count_test.item())
 
-                    if reduce_dice_1 / count_test > dice_avg_best:
-                        dice_avg_best = reduce_dice_1 / count_test
+                    if reduce_dice_1 / reduce_count_test > dice_avg_best:
+                        dice_avg_best = reduce_dice_1 / reduce_count_test
                         save_mode_path = os.path.join(snapshot_path, '_dice_best' + '.pth')
                         torch.save(net.module.model.state_dict(), save_mode_path)
-                    if reduce_iou_1 / count_test > miou_best:
-                        miou_best = reduce_iou_1 / count_test
+                    if reduce_iou_1 / reduce_count_test > miou_best:
+                        miou_best = reduce_iou_1 / reduce_count_test
                         save_mode_path = os.path.join(snapshot_path, '_mIou_best' + '.pth')
                         torch.save(net.module.model.state_dict(), save_mode_path)
                     print(f"dice_avg_best:{dice_avg_best}, mIou_best:{miou_best}")
@@ -227,7 +226,7 @@ if __name__ == "__main__":
         test_num = 401
         r = range(test_num)
         test_idxs = random.sample(r, test_num)
-        train_data_path = file_path + "devdata/new_dataset_2/annotation.json"  # todo
+        train_data_path = args.root_path + "your_json_file_path"  # todo
 
         dataset_lb = Throatdataset(args, train_data_path, index=labeled_idxs, aug_type='strong', mode="train",
                                    resize_shape=args.resize_shape)

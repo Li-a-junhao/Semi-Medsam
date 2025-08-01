@@ -61,21 +61,17 @@ class Throatdataset(Dataset):
         image_path = image_item['image_path']
         label_path = os.path.join(root, image_item['label_path'])
         NBI_image_path = image_item['mode_nbi_image_path']
-        NBI_label_path = image_item['mode_nbi_label_path']
         img_w = Image.open(image_path).convert('RGB')
         img_n = Image.open(NBI_image_path).convert('RGB')
         label_w = Image.open(label_path).convert('L')
-        label_n = Image.open(NBI_label_path).convert('L')
 
         assert len(np.array(img_w)) == len(np.array(label_w)) and len(np.array(img_w)[0]) == len(np.array(label_w)[0])
-        assert len(np.array(img_n)) == len(np.array(label_n)) and len(np.array(img_n)[0]) == len(np.array(label_n)[0])
 
         seed = np.random.randint(2147483647)
         if self.aug_type == "weak":
             img_w = img_w
             img_n = img_n
             label_w = label_w
-            label_n = label_n
 
         if self.aug_type == "strong":
             torch.manual_seed(seed)
@@ -85,7 +81,6 @@ class Throatdataset(Dataset):
             torch.manual_seed(seed)
             img_n = self.img_transform_s(img_n)
             torch.manual_seed(seed)
-            label_n = self.gt_transform_s(label_n)
 
         imgw_arr = np.array(img_w)
         index = np.where((imgw_arr[:, :, 0] == 0) & (imgw_arr[:, :, 1] == 0) & (imgw_arr[:, :, 2] == 0))

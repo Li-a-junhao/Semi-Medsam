@@ -1,5 +1,5 @@
 from typing import Optional, Tuple, Type
-from moe import MoE, MoE_channel
+from utils_.moe import MoE_channel
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
