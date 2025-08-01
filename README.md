@@ -12,8 +12,8 @@ In this work, we present a novel prompt-free, SAM-assisted framework named Semi-
 # Installation
 1. Create a conda environment
 ```bash
-conda create -n medsam python=3.7
-conda activate medsam
+conda create -n semi-medsam python=3.7
+conda activate semi-medsam
 ```
 
 2. Install dependencies
