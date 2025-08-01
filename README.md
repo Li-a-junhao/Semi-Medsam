@@ -27,3 +27,14 @@ You need to first download the SAM's checkpoint: https://github.com/facebookrese
 and place it in 'root_path/checkpoints/SAM/sam_vit_b_01ec64 (1).pth'. Then fill in the blanks marked with '??' and run the following command:
 ```bash
 python train.py --root_path ?? --label_num ?? 
+```
+
+### Inference
+**Generate the annotation file:** Before running inference, you first need to generate the JSON annotation file for the demo dataset. Run the following command:
+```bash
+python annotation.py
+  ```
+**Run inference:** Once the `annotation_demo.json` file is created, run the main inference script with the following command:
+```bash
+python inference.py 
+```
