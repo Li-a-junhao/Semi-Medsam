@@ -24,7 +24,7 @@ pip install -r requirements.txt
 # Usage
 ### Training
 You need to first download the SAM's checkpoint: https://github.com/facebookresearch/segment-anything
-and place it in 'root_path/checkpoints/SAM/sam_vit_b_01ec64 (1).pth'. Then fill in the blanks marked with '??' and run the following command:
+and place it in "root_path/checkpoints/SAM/sam_vit_b_01ec64 (1).pth". Then fill in the blanks marked with "??" and run the following command:
 ```bash
 python train.py --root_path ?? --label_num ?? 
 ```
@@ -34,7 +34,7 @@ python train.py --root_path ?? --label_num ??
 ```bash
 python annotation.py
   ```
-**Run inference:** Once the `annotation_demo.json` file is created, run the main inference script with the following command:
+**Run inference:** Once the "annotation_demo.json" file is created, run the main inference script with the following command:
 ```bash
 python inference.py 
 ```
